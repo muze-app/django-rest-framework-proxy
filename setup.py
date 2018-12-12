@@ -10,7 +10,7 @@ import sys
 name = 'django-rest-framework-proxy'
 package = 'rest_framework_proxy'
 description = 'Django Rest Framework Proxy allows easy proxying of incoming REST requests'
-url = 'http://github.com/eofs/django-rest-framework-proxy/'
+url = 'http://github.com/vincentwan/django-rest-framework-proxy'
 author = 'Tomi Pajunen'
 author_email = 'tomi@madlab.fi'
 license = 'BSD'
