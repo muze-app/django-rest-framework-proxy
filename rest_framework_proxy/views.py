@@ -30,17 +30,17 @@ class ProxyView(BaseProxyView):
     Proxy view
     """
     def get_proxy_host(self):
-        print("Xin here printing in get_proxy_host")
+        print("Xin here printing in get_proxy_host", file=sys.stderr)
         return self.proxy_host or self.proxy_settings.HOST
 
     def get_source_path(self):
-        print("Xin here printing in get_source_path")
+        print("Xin here printing in get_source_path", file=sys.stderr)
         if self.source:
             return self.source % self.kwargs
         return None
 
     def get_request_url(self, request):
-        print("Xin here printing in get_request_url")
+        print("Xin here printing in get_request_url", file=sys.stderr)
         host = self.get_proxy_host()
         path = self.get_source_path()
         if path:
@@ -48,7 +48,7 @@ class ProxyView(BaseProxyView):
         return host
 
     def get_request_params(self, request):
-        print("Xin here printing in get_request_params")
+        print("Xin here printing in get_request_params", file=sys.stderr)
         if request.query_params:
             qp = request.query_params.copy()
             for param in self.proxy_settings.DISALLOWED_PARAMS:
@@ -58,14 +58,14 @@ class ProxyView(BaseProxyView):
         return {}
 
     def get_request_data(self, request):
-        print("Xin here printing in get_request_data")
+        print("Xin here printing in get_request_data", file=sys.stderr)
         if 'application/json' in request.content_type:
             return json.dumps(request.data)
 
         return request.data
 
     def get_request_files(self, request):
-        print("Xin here printing in get_request_files")
+        print("Xin here printing in get_request_files", file=sys.stderr)
         files = {}
         if request.FILES:
             for field, content in request.FILES.items():
@@ -73,7 +73,7 @@ class ProxyView(BaseProxyView):
         return files
 
     def get_default_headers(self, request):
-        print("Xin here printing in get_default_headers")
+        print("Xin here printing in get_default_headers", file=sys.stderr)
         return {
             'Accept': request.META.get('HTTP_ACCEPT', self.proxy_settings.DEFAULT_HTTP_ACCEPT),
             'Accept-Language': request.META.get('HTTP_ACCEPT_LANGUAGE', self.proxy_settings.DEFAULT_HTTP_ACCEPT_LANGUAGE),
@@ -81,7 +81,7 @@ class ProxyView(BaseProxyView):
         }
 
     def get_headers(self, request):
-        print("Xin here printing in get_headers")
+        print("Xin here printing in get_headers", file=sys.stderr)
         #import re
         #regex = re.compile('^HTTP_')
         #request_headers = dict((regex.sub('', header), value) for (header, value) in request.META.items() if header.startswith('HTTP_'))
@@ -105,18 +105,18 @@ class ProxyView(BaseProxyView):
         return headers
 
     def get_verify_ssl(self, request):
-        print("Xin here printing in get_verify_ssl")
+        print("Xin here printing in get_verify_ssl", file=sys.stderr)
         return self.verify_ssl or self.proxy_settings.VERIFY_SSL
 
     def get_cookies(self, requests):
-        print("Xin here printing in get_cookies")
+        print("Xin here printing in get_cookies", file=sys.stderr)
         return None
 
     def parse_proxy_response(self, response):
         """
         Modified version of rest_framework.request.Request._parse(self)
         """
-        print("Xin here printing in parse_proxy_response")
+        print("Xin here printing in parse_proxy_response", file=sys.stderr)
         parsers = self.get_parsers()
         stream = StringIO(response._content)
         content_type = response.headers.get('content-type', None)
@@ -142,7 +142,7 @@ class ProxyView(BaseProxyView):
             return parsed
 
     def create_response(self, response):
-        print("Xin here printing in create_response")
+        print("Xin here printing in create_response", file=sys.stderr)
         if self.return_raw or self.proxy_settings.RETURN_RAW:
             return HttpResponse(response.text, status=response.status_code,
                     content_type=response.headers.get('content-type'))
@@ -158,11 +158,11 @@ class ProxyView(BaseProxyView):
         return Response(body, status)
 
     def create_error_response(self, body, status):
-        print("Xin here printing in create_error_response")
+        print("Xin here printing in create_error_response", file=sys.stderr)
         return Response(body, status)
 
     def proxy(self, request, *args, **kwargs):
-        print("Xin here printing in proxy")
+        print("Xin here printing in proxy", file=sys.stderr)
         url = self.get_request_url(request)
         params = self.get_request_params(request)
         data = self.get_request_data(request)
@@ -222,21 +222,21 @@ class ProxyView(BaseProxyView):
         return self.create_response(response)
 
     def get(self, request, *args, **kwargs):
-        print("Xin here printing in get")
+        print("Xin here printing in get", file=sys.stderr)
         return self.proxy(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
-        print("Xin here printing in put")
+        print("Xin here printing in put", file=sys.stderr)
         return self.proxy(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        print("Xin here printing in post")
+        print("Xin here printing in post", file=sys.stderr)
         return self.proxy(request, *args, **kwargs)
 
     def patch(self, request, *args, **kwargs):
-        print("Xin here printing in patch")
+        print("Xin here printing in patch", file=sys.stderr)
         return self.proxy(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
-        print("Xin here printing in delete")
+        print("Xin here printing in delete", file=sys.stderr)
         return self.proxy(request, *args, **kwargs)
