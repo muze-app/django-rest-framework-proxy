@@ -15,7 +15,7 @@ from rest_framework.exceptions import UnsupportedMediaType
 from rest_framework_proxy.settings import api_proxy_settings
 from rest_framework_proxy.adapters import StreamingHTTPAdapter
 from rest_framework_proxy.utils import StreamingMultipart, generate_boundary
-
+import sys
 
 class BaseProxyView(APIView):
     proxy_settings = api_proxy_settings
@@ -144,7 +144,7 @@ class ProxyView(BaseProxyView):
     def create_response(self, response):
         print("Xin here printing in create_response", file=sys.stderr)
         if self.return_raw or self.proxy_settings.RETURN_RAW:
-            return HttpResponse(response.text, status=response.status_code,
+            return HttpResponse(content=response.content, status=response.status_code,
                     content_type=response.headers.get('content-type'))
 
         status = response.status_code
